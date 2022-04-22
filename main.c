@@ -10,23 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/wait.h>
+#include "pipex.h"
 
-extern char** environ;
-
-int	main(void)
+int	main(int argc, char *argv[], char *envp[])
 {
 	char	*cmd_path = "/usr/bin/cat";
-	char	*cmd_args[] = {"cat", "-E", NULL};
-	char	*cmd2_path = "/usr/bin/grep";
-	char	*cmd2_args[] = {"grep", "love", NULL};
+	char	*cmd_args[] = {"cat", NULL};
+	char	*cmd2_path = "/usr/bin/wc";
+	char	*cmd2_args[] = {"wc", NULL};
+	char	**bin_path;
+	char	*tmp_bin_path;
 	int		pid;
 	int		pipe_fd[2];
 	int		fd[2];
+	size_t	i;
 
+	if (argc != 5)
+		return (1);
+	bin_path = ft_split(ft_getenv("PATH", envp), ':');
+	i = 0;
+	while (bin_path[i])
+	{
+		tmp_bin_path = bin_path[i];
+		bin_path[i] = ft_strjoin(bin_path[i], "/");
+		printf("parcial bin: %s\n", bin_path[i]);
+		free(tmp_bin_path);
+		tmp_bin_path = NULL;
+		i++;
+	}
+	printf("argv: %s\n", argv[0]);
 	if(pipe(pipe_fd) == -1)
 		return (1);
 	pid = fork();
@@ -37,7 +49,7 @@ int	main(void)
 		dup2(fd[0], 0);
 		dup2(pipe_fd[1], 1);
 		close(fd[0]);
-		if(execve(cmd_path, cmd_args, environ) == -1)
+		if(execve(cmd_path, cmd_args, envp) == -1)
 			return (1);
 	}
 	else if (pid > 0)
@@ -50,7 +62,14 @@ int	main(void)
 			return (1);
 		dup2(pipe_fd[0], 0);
 		dup2(fd[1], 1);
-		if(execve(cmd2_path, cmd2_args, environ) == -1)
+		i = 0;
+		while (bin_path[i])
+		{
+			free(bin_path[i]);
+			bin_path[i] = NULL;
+			i++;
+		}
+		if(execve(cmd2_path, cmd2_args, envp) == -1)
 			return (1);
 	}
 	return (1);
