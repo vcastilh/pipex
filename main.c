@@ -6,13 +6,21 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:49:54 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/04/29 23:02:16 by vcastilh         ###   ########.fr       */
+/*   Updated: 2022/05/04 04:24:07 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**get_bin_path(char **envp)
+char	**get_cmd_argv(char *argv)
+{
+	char	**cmd_argv;
+
+	cmd_argv = ft_split(argv, ' ');
+	return (cmd_argv);
+}
+
+char	**get_bin_path(char **envp, char **cmd_argv)
 {
 	char	**bin_path;
 	size_t	i;
@@ -24,6 +32,10 @@ char	**get_bin_path(char **envp)
 	{
 		tmp_bin_path = bin_path[i];
 		bin_path[i] = ft_strjoin(bin_path[i], "/");
+		free(tmp_bin_path);
+		tmp_bin_path = NULL;
+		tmp_bin_path = bin_path[i];
+		bin_path[i] = ft_strjoin(bin_path[i], *cmd_argv);
 		free(tmp_bin_path);
 		tmp_bin_path = NULL;
 		i++;
@@ -38,6 +50,7 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*cmd2_path = "/usr/bin/wc";
 	char	*cmd2_args[] = {"wc", NULL};
 	char	**bin_path;
+	char	**cmd_argv;
 	int		pid;
 	int		pipe_fd[2];
 	int		fd[2];
@@ -45,10 +58,10 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc != 5)
 		return (1);
-	bin_path = get_bin_path(envp); 
-	printf("argv: %s\n", argv[0]);
 	if(pipe(pipe_fd) == -1)
 		return (1);
+	cmd_argv = get_cmd_argv(argv[2]);
+	bin_path = get_bin_path(envp, cmd_argv); 
 	pid = fork();
 	if (pid == 0)
 	{
