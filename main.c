@@ -6,12 +6,24 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:49:54 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/04 04:24:07 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/09 19:33:26 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+void	free_ptr(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != NULL)
+	{
+		free(str[i]);
+		str[i] = NULL;
+		i++;
+	}
+}
 char	**get_cmd_argv(char *argv)
 {
 	char	**cmd_argv;
@@ -45,10 +57,6 @@ char	**get_bin_path(char **envp, char **cmd_argv)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	char	*cmd_path = "/usr/bin/cat";
-	char	*cmd_args[] = {"cat", NULL};
-	char	*cmd2_path = "/usr/bin/wc";
-	char	*cmd2_args[] = {"wc", NULL};
 	char	**bin_path;
 	char	**cmd_argv;
 	int		pid;
@@ -65,13 +73,22 @@ int	main(int argc, char *argv[], char *envp[])
 	pid = fork();
 	if (pid == 0)
 	{
-		fd[0] = open("file1.txt", O_RDONLY);
-		printf("BABY\n");
-		dup2(fd[0], 0);
-		dup2(pipe_fd[1], 1);
-		close(fd[0]);
-		if(execve(cmd_path, cmd_args, envp) == -1)
-			return (1);
+		while (bin_path[i] != NULL)
+		{
+			if (!(access(bin_path[i], F_OK | X_OK)))
+			{
+				fd[0] = open("file1.txt", O_RDONLY);//E se não existir,fd deve existir para o segundo comando tbm(segundo cmd precisa de input?)
+				printf("BABY\n");
+				dup2(fd[0], STDIN_FILENO);
+				dup2(pipe_fd[1], STDOUT_FILENO);
+				close(fd[0]);
+				if(execve(bin_path[i], cmd_argv, envp) == -1)
+					return (1);
+			}
+			i++;
+		}
+		printf ("-bash: %s: command not found", *cmd_argv);
+		return (1);
 	}
 	else if (pid > 0)
 	{
@@ -84,14 +101,24 @@ int	main(int argc, char *argv[], char *envp[])
 		dup2(pipe_fd[0], 0);
 		dup2(fd[1], 1);
 		i = 0;
-		while (bin_path[i])
+		free_ptr(bin_path);
+		free_ptr(cmd_argv);
+		cmd_argv = get_cmd_argv(argv[3]);
+		bin_path = get_bin_path(envp, cmd_argv); 
+		while (bin_path[i] != NULL)
 		{
-			free(bin_path[i]);
-			bin_path[i] = NULL;
+			if (!(access(bin_path[i], F_OK | X_OK)))
+			{
+				fd[0] = open("file1.txt", O_RDONLY);
+				printf("BABY\n");
+				dup2(fd[0], 0);
+				dup2(pipe_fd[1], 1);
+				close(fd[0]);
+				if(execve(bin_path[i], cmd_argv, envp) == -1)
+					return (1);
+			}
 			i++;
 		}
-		if(execve(cmd2_path, cmd2_args, envp) == -1)
-			return (1);
 	}
 	return (1);
 }
