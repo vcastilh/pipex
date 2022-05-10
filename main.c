@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:49:54 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/10 13:15:45 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/10 16:42:46 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,21 @@ int	main(int argc, char *argv[], char *envp[])
 						if(execve(bin_path[i], cmd_argv, envp) == -1)
 							return (1);
 					}
-					else if (cmd_pos == argc -1)
+					else if (cmd_pos == argc - 2)
 					{
 						fd[1] = open("file2.txt", O_RDWR | O_TRUNC | O_CREAT, 0664);
 						close(pipe_fd[0]);
 						close(pipe_fd[1]);
 						dup2(fd[1], STDOUT_FILENO);
+						if(execve(bin_path[i], cmd_argv, envp) == -1)
+							return (1);
 					}
 					else
 					{
 						close(pipe_fd[0]);
 						dup2(pipe_fd[1], STDOUT_FILENO);
+						if(execve(bin_path[i], cmd_argv, envp) == -1)
+							return (1);
 					}
 				}
 				waitpid(pid, NULL, 0);
