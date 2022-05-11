@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:49:54 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/10 16:42:46 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/11 19:50:28 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ void	free_ptr(char **str)
 	while (str[i] != NULL)
 	{
 		free(str[i]);
-		str[i] = NULL;
 		i++;
 	}
+	free(str);
+	str = NULL;
 }
 char	**get_cmd_argv(char *argv)
 {
@@ -65,8 +66,6 @@ int	main(int argc, char *argv[], char *envp[])
 	size_t	i;
 	int		cmd_pos;
 
-	if (argc != 5)
-		return (1);
 	cmd_pos = 1;
 	while (++cmd_pos < argc - 1) 
 	{
