@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:49:54 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/11 19:50:28 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/11 20:47:34 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +24,6 @@ void	free_ptr(char **str)
 	}
 	free(str);
 	str = NULL;
-}
-char	**get_cmd_argv(char *argv)
-{
-	char	**cmd_argv;
-
-	cmd_argv = ft_split(argv, ' ');
-	return (cmd_argv);
-}
-
-char	**get_bin_path(char **envp, char **cmd_argv)
-{
-	char	**bin_path;
-	size_t	i;
-	char	*tmp_bin_path;
-
-	bin_path = ft_split(ft_getenv("PATH", envp), ':');
-	i = 0;
-	while (bin_path[i])
-	{
-		tmp_bin_path = bin_path[i];
-		bin_path[i] = ft_strjoin(bin_path[i], "/");
-		free(tmp_bin_path);
-		tmp_bin_path = NULL;
-		tmp_bin_path = bin_path[i];
-		bin_path[i] = ft_strjoin(bin_path[i], *cmd_argv);
-		free(tmp_bin_path);
-		tmp_bin_path = NULL;
-		i++;
-	}
-	return (bin_path);
 }
 
 int	main(int argc, char *argv[], char *envp[])
