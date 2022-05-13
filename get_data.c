@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_data.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: coder <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:45:26 by coder             #+#    #+#             */
-/*   Updated: 2022/05/11 20:46:09 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/13 17:49:55 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,25 @@
 char	**get_cmd_argv(char *argv)
 {
 	char	**cmd_argv;
+	int		i;
+	char	*tmp_cmd;
 
+	i = 0;
 	cmd_argv = ft_split(argv, ' ');
+	while (cmd_argv[i] != NULL)
+	{
+		if(*cmd_argv[i] == '\'')
+		{
+			tmp_cmd = cmd_argv[i];
+			cmd_argv[i] = ft_strtrim(tmp_cmd, "\'");
+			free(tmp_cmd);
+			tmp_cmd = NULL;
+			i++;		
+		}
+		else
+			i++;	
+	}
+	tmp_cmd = NULL;
 	return (cmd_argv);
 }
 
