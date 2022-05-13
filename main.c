@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:49:54 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/12 05:55:27 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/13 06:42:32 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ int	main(int argc, char *argv[], char *envp[])
 						dup2(pipe_fd[1], STDOUT_FILENO);
 						close(pipe_fd[1]);
 						if(execve(data.bin_path[i], data.cmd_argv, envp) == -1)
+						{
+							perror("cmd failed");
 							return (1);
+						}
 					}
 					else if (data.cmd_pos == argc - 2)
 					{
@@ -68,14 +71,20 @@ int	main(int argc, char *argv[], char *envp[])
 						close(pipe_fd[1]);
 						dup2(fd[1], STDOUT_FILENO);
 						if(execve(data.bin_path[i], data.cmd_argv, envp) == -1)
+						{
+							perror("last cmd failed");
 							return (1);
+						}
 					}
 					else
 					{
 						close(pipe_fd[0]);
 						dup2(pipe_fd[1], STDOUT_FILENO);
 						if(execve(data.bin_path[i], data.cmd_argv, envp) == -1)
+						{
+							perror("else cmd failed");
 							return (1);
+						}
 					}
 				}
 				waitpid(pid, NULL, 0);
