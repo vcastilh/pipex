@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:45:26 by coder             #+#    #+#             */
-/*   Updated: 2022/05/13 17:49:55 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/17 21:45:25 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,47 @@ char	**get_bin_path(char **envp, char **cmd_argv)
 		i++;
 	}
 	return (bin_path);
+}
+
+char	*check_bin_acess(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->bin_path[i] != NULL)
+	{
+		if (!(access(data->bin_path[i], F_OK | X_OK)))
+		{
+			return (data->bin_path[i]);
+		}
+		else
+			i++;
+	}
+	
+	return (NULL);
+
+}
+
+int	get_data(t_data *data, char **argv, char **envp)
+{
+	data->cmd_argv = get_cmd_argv(argv[data->cmd_pos]);
+	if (data->cmd_argv)
+	{
+		data->bin_path = get_bin_path(envp, data->cmd_argv);
+		if (data->bin_path)
+		{
+			data->pathname = ft_strdup(check_bin_acess(data));
+			return (1);
+		}
+		else
+		{
+			write(2, "arquivo ou diretorio inextistente\n", 17);
+			return (0);
+		}
+	}
+	else
+	{
+		perror("invalid arg\n");
+		return (0);
+	}	
 }

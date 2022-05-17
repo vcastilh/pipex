@@ -6,13 +6,13 @@
 /*   By: coder <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 01:59:22 by coder             #+#    #+#             */
-/*   Updated: 2022/05/14 02:37:32 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/17 21:48:03 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "pipex.h"
 
-void	child_process(t_data *data, int argc, size_t i, char *envp[])
+void	child_process(t_data *data, int argc, char *envp[])
 {
 	if (data->cmd_pos == 2)
 	{
@@ -21,7 +21,7 @@ void	child_process(t_data *data, int argc, size_t i, char *envp[])
 		dup2(data->fd[0], STDIN_FILENO);
 		dup2(data->pipe_fd[1], STDOUT_FILENO);
 		close(data->pipe_fd[1]);
-		if(execve(data->bin_path[i], data->cmd_argv, envp) == -1)
+		if(execve(data->pathname, data->cmd_argv, envp) == -1)
 		{
 			perror("cmd failed");
 		}
@@ -32,18 +32,9 @@ void	child_process(t_data *data, int argc, size_t i, char *envp[])
 		close(data->pipe_fd[0]);
 		close(data->pipe_fd[1]);
 		dup2(data->fd[1], STDOUT_FILENO);
-		if(execve(data->bin_path[i], data->cmd_argv, envp) == -1)
+		if(execve(data->pathname, data->cmd_argv, envp) == -1)
 		{
 			perror("last cmd failed");
 		}
 	}
-	else
-	{
-		close(data->pipe_fd[0]);
-		dup2(data->pipe_fd[1], STDOUT_FILENO);
-		if(execve(data->bin_path[i], data->cmd_argv, envp) == -1)
-		{
-			perror("else cmd failed");
-		}
-	}	
 }

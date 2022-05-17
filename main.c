@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:49:54 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/14 02:36:31 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/17 21:42:52 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,38 +28,28 @@ void	free_ptr(char **str)
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	size_t	i;
 	t_data	data;
 
 	data.cmd_pos = 1;
 	while (++data.cmd_pos < argc - 1) 
 	{
 		if(pipe(data.pipe_fd) == -1)
-			return (1);
-		data.cmd_argv = get_cmd_argv(argv[data.cmd_pos]);
-		data.bin_path = get_bin_path(envp, data.cmd_argv);
-		i = 0;
-		while (data.bin_path[i] != NULL)
+			perror("pipe error\n");
+		if(get_data(&data, argv, envp))
 		{
-			if (!(access(data.bin_path[i], F_OK | X_OK)))
-			{
-				data.pid = fork();
-				if (data.pid < 0)
-					return (1);
-				if (data.pid == 0)
-				{
-					child_process(&data, argc, i, envp);
-				}
-				waitpid(data.pid, NULL, 0);
-				break;
-			}
-			i++;
+			data.pid = fork();
+			if (data.pid < 0)
+				perror("fork error\n");
+			else if (data.pid == 0)
+				child_process(&data, argc, envp);
+			waitpid(data.pid, NULL, 0);
 		}
 		close(data.pipe_fd[1]);
 		dup2(data.pipe_fd[0], STDIN_FILENO);
 		close(data.pipe_fd[0]);
 		free_ptr(data.cmd_argv);
 		free_ptr(data.bin_path);
+		free(data.pathname);
 	}
 	return (0);
 }
