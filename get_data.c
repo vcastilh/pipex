@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:45:26 by coder             #+#    #+#             */
-/*   Updated: 2022/05/18 20:05:50 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/19 14:54:15 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,15 @@ void	get_data(t_data *data, char **argv, char **envp)
 		data->bin_path = get_bin_path(envp, data->cmd_argv);
 		if (data->bin_path)
 		{
-			data->pathname = ft_strdup(check_bin_acess(data));
+			data->pathname = check_bin_acess(data);
+			if (data->pathname)
+				data->pathname = ft_strdup(data->pathname);
+			else
+				handle_exit(*data->cmd_argv, ft_strdup("comand not found"), data, 127);
 		}
 		else
 		{
-			handle_exit(argv[0], ft_strdup("comand not found"), data, 127);
+			handle_exit(*data->cmd_argv, ft_strdup("comand not found"), data, 127);
 		}
 	}
 	else
