@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:45:26 by coder             #+#    #+#             */
-/*   Updated: 2022/05/17 21:45:25 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/18 20:05:50 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,20 @@ char	*check_bin_acess(t_data *data)
 		else
 			i++;
 	}
-	
 	return (NULL);
-
 }
 
-int	get_data(t_data *data, char **argv, char **envp)
+int	open_file(char *file, int flag, t_data *data)
+{
+	int	fd;
+
+	fd = open(file, flag, 0664);
+	if (fd == -1)
+		handle_exit(file, ft_strdup("No such file or directory or access denied"), data, 2);
+	return (fd);
+}
+
+void	get_data(t_data *data, char **argv, char **envp)
 {
 	data->cmd_argv = get_cmd_argv(argv[data->cmd_pos]);
 	if (data->cmd_argv)
@@ -88,17 +96,14 @@ int	get_data(t_data *data, char **argv, char **envp)
 		if (data->bin_path)
 		{
 			data->pathname = ft_strdup(check_bin_acess(data));
-			return (1);
 		}
 		else
 		{
-			write(2, "arquivo ou diretorio inextistente\n", 17);
-			return (0);
+			handle_exit(argv[0], ft_strdup("comand not found"), data, 127);
 		}
 	}
 	else
 	{
-		perror("invalid arg\n");
-		return (0);
+		handle_exit(*data->cmd_argv, ft_strdup("comand not found"), data, 127);
 	}	
 }

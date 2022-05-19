@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:49:54 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/17 21:42:52 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/18 20:10:26 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,13 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		if(pipe(data.pipe_fd) == -1)
 			perror("pipe error\n");
-		if(get_data(&data, argv, envp))
-		{
-			data.pid = fork();
-			if (data.pid < 0)
-				perror("fork error\n");
-			else if (data.pid == 0)
-				child_process(&data, argc, envp);
-			waitpid(data.pid, NULL, 0);
-		}
+		get_data(&data, argv, envp);
+		data.pid = fork();
+		if (data.pid < 0)
+			perror("fork error\n");
+		else if (data.pid == 0)
+			child_process(&data, argv, envp);
+		waitpid(data.pid, NULL, 0);
 		close(data.pipe_fd[1]);
 		dup2(data.pipe_fd[0], STDIN_FILENO);
 		close(data.pipe_fd[0]);

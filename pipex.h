@@ -6,7 +6,7 @@
 /*   By: vcastilh <vcastilh@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 00:23:02 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/17 21:46:26 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/18 20:08:44 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,11 @@ typedef struct s_data
 }	t_data;
 
 
-int		get_data(t_data *data, char *argv[], char *envp[]);
+void	get_data(t_data *data, char *argv[], char *envp[]);
 char	**get_cmd_argv(char *argv);
 char	**get_bin_path(char **envp, char **cmd_argv);
-void	child_process(t_data *data, int argc, char *envp[]);
+void	child_process(t_data *data, char *argv[], char *envp[]);
+void	handle_exit(char *arg, char *msg, t_data *data, int code_error);
+int		open_file(char *file, int flag, t_data *data);
+void	free_ptr(char **str);
 #endif

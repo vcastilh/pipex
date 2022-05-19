@@ -6,7 +6,7 @@
 #    By: vcastilh <vcastilh@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/22 00:26:46 by vcastilh          #+#    #+#              #
-#    Updated: 2022/05/14 02:22:11 by coder            ###   ########.fr        #
+#    Updated: 2022/05/18 20:06:42 by coder            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ LIBFT = libft.a
 SRCS = main.c \
 	   get_data.c \
 	   child.c \
+	   handle_exit.c \
 
 all: $(NAME)
 
