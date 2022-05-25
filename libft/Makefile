@@ -6,7 +6,7 @@
 #    By: vcastilh <vcastilh@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/08/18 10:20:32 by vcastilh          #+#    #+#              #
-#    Updated: 2022/05/13 14:48:55 by coder            ###   ########.fr        #
+#    Updated: 2022/05/24 16:12:29 by coder            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,16 +52,18 @@ FILES = ft_isalpha.c \
 		ft_getenv.c \
 
 
+OBJS = $(FILES:.c=.o)
+
 all: $(NAME)
 
 $(NAME): 
 
 	$(CC) $(CFLAGS) $(FILES) 
-	ar rcs $@ *.o
+	ar rcs $@ $(OBJS)
 
 	
 clean:
-	rm -f *.o
+	rm -f $(OBJS)
 
 fclean: clean 
 	rm -f $(NAME)

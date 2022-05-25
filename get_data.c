@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:45:26 by coder             #+#    #+#             */
-/*   Updated: 2022/05/19 14:54:15 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/25 13:07:21 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ char	**get_cmd_argv(char *argv)
 	cmd_argv = ft_split(argv, ' ');
 	while (cmd_argv[i] != NULL)
 	{
-		if(*cmd_argv[i] == '\'')
+		if (*cmd_argv[i] == '\'')
 		{
 			tmp_cmd = cmd_argv[i];
 			cmd_argv[i] = ft_strtrim(tmp_cmd, "\'");
 			free(tmp_cmd);
 			tmp_cmd = NULL;
-			i++;		
+			i++;
 		}
 		else
-			i++;	
+			i++;
 	}
 	tmp_cmd = NULL;
 	return (cmd_argv);
@@ -74,16 +74,29 @@ char	*check_bin_acess(t_data *data)
 		else
 			i++;
 	}
-	return (NULL);
+	return (ft_strdup(""));
 }
 
-int	open_file(char *file, int flag, t_data *data)
+int	open_file(char *file, int flag, t_data *data, int is_getting_data)
 {
 	int	fd;
 
 	fd = open(file, flag, 0664);
 	if (fd == -1)
-		handle_exit(file, ft_strdup("No such file or directory or access denied"), data, 2);
+	{
+		if (is_getting_data)
+		{
+			handle_exit(file,
+				ft_strdup(":No such file or directory or access denied\n"),
+				data, 1);
+		}
+		else
+		{
+			handle_exit(file,
+				ft_strdup("No such file or directory or access denied\n"),
+				data, 0);
+		}
+	}
 	return (fd);
 }
 
@@ -96,18 +109,21 @@ void	get_data(t_data *data, char **argv, char **envp)
 		if (data->bin_path)
 		{
 			data->pathname = check_bin_acess(data);
-			if (data->pathname)
+			if (*data->pathname)
 				data->pathname = ft_strdup(data->pathname);
 			else
-				handle_exit(*data->cmd_argv, ft_strdup("comand not found"), data, 127);
+				handle_exit(*data->cmd_argv, ft_strdup(":comand not found\n"),
+					data, 1);
 		}
 		else
 		{
-			handle_exit(*data->cmd_argv, ft_strdup("comand not found"), data, 127);
+			handle_exit(*data->cmd_argv,
+				ft_strdup(":comand not found\n"), data, 1);
 		}
 	}
 	else
 	{
-		handle_exit(*data->cmd_argv, ft_strdup("comand not found"), data, 127);
+		handle_exit(*data->cmd_argv, ft_strdup(":comand not found\n"),
+			data, 1);
 	}	
 }

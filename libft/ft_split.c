@@ -6,11 +6,28 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 20:09:11 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/13 18:35:34 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/20 17:39:07 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libft.h"
+#include "libft.h"
+
+// "/usr/bin:/sbin:/bin"
+static char *fill_word(char *arr, size_t i, char const **s)
+{
+	size_t	k;
+
+	k = 0;
+	while (i-- > 0 && **s)
+	{
+		arr[k] = **s;
+		(*s)++;
+		k++;
+	}
+	arr[k] = '\0';
+	return (arr);
+}
+
 static size_t	ft_count_words(char const *s, char c)
 {
 	size_t	n;
@@ -34,19 +51,17 @@ static size_t	ft_count_words(char const *s, char c)
 			else
 				n++;
 			while (s[i] != c && s[i] != '\0')
-			{
 				i++;
-			}
 		}
 	}
 	return (n);
 }
 
+// "/usr/bin:/sbin:/bin"
 static char	**ft_get_words(char const *s, char c, size_t num_words, char **arr)
 {
 	size_t	i;
 	size_t	j;
-	size_t	k;
 
 	j = 0;
 	while (num_words--)
@@ -61,7 +76,7 @@ static char	**ft_get_words(char const *s, char c, size_t num_words, char **arr)
 				i++;
 				while (s[i] != '\'')
 					i++;
-				i++; 
+				i++;
 			}
 			else
 				i++;
@@ -69,10 +84,7 @@ static char	**ft_get_words(char const *s, char c, size_t num_words, char **arr)
 		arr[j] = (char *)malloc((i + 1) * sizeof(char));
 		if (!*arr)
 			return (NULL);
-		k = 0; 
-		while (i-- > 0 && *s) 
-			arr[j][k++] = *s++;
-		arr[j][k] = '\0';
+		arr[j] = fill_word(arr[j], i, &s);
 		j++;
 	}
 	arr[j] = NULL;

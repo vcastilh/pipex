@@ -6,7 +6,7 @@
 #    By: vcastilh <vcastilh@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/22 00:26:46 by vcastilh          #+#    #+#              #
-#    Updated: 2022/05/18 20:06:42 by coder            ###   ########.fr        #
+#    Updated: 2022/05/24 16:08:51 by coder            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,22 +20,26 @@ SRCS = main.c \
 	   child.c \
 	   handle_exit.c \
 
+OBJS = $(SRCS:.c=.o)
+
 all: $(NAME)
 
-$(NAME): $(LIBFT)
-	$(CC) $(CFLAGS) $(SRCS) -Ilibft
-	$(CC) *.o -Llibft -lft -o $(NAME) 
-	# remove wildcards later
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(OBJS) -Llibft -lft -o $(NAME) 
 
+$(OBJS): $(SRCS)
+	$(CC) $(CFLAGS) -Ilibft $(SRCS) 
 
 $(LIBFT):
 	make -C libft
 
 clean:
-	rm -rf *.o 
+	rm -rf $(OBJS) 
 
 fclean: clean
 	rm -rf $(NAME)
 	make fclean -C libft
 
 re: fclean all
+
+.PHONY: all clean fclean re
