@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:49:54 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/25 13:06:22 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/25 21:42:34 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_data	data;
 
 	if (argc != 5)
-		handle_exit(argv[0], ft_strdup("Invalid argument: pipex need 4 arguments\n"), &data, 0);
+		handle_exit(argv[0], ft_strdup(":Error: need 4 arguments\n"), &data, 0);
 	data.fd[0] = open_file(argv[1], O_RDONLY, &data, 0);
 	data.cmd_pos = 1;
 	while (++data.cmd_pos < argc - 1)

@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:45:26 by coder             #+#    #+#             */
-/*   Updated: 2022/05/25 13:07:21 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/25 21:51:58 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,13 @@ int	open_file(char *file, int flag, t_data *data, int is_getting_data)
 		if (is_getting_data)
 		{
 			handle_exit(file,
-				ft_strdup(":No such file or directory or access denied\n"),
+				ft_strdup(":No such file or directory\n"),
 				data, 1);
 		}
 		else
 		{
 			handle_exit(file,
-				ft_strdup("No such file or directory or access denied\n"),
+				ft_strdup(":No such file or directory\n"),
 				data, 0);
 		}
 	}
