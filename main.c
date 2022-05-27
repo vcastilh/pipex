@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 14:49:54 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/27 22:38:31 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/27 23:23:31 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int argc, char *argv[], char *envp[])
 		else if (data.pid == 0)
 			child_process(&data, argv, envp);
 		waitpid(data.pid, NULL, 0);
-		//close(data.pipe_fd[1]);
+		close(data.pipe_fd[1]);
 		////dup2(data.pipe_fd[0], STDIN_FILENO);
 		//close(data.pipe_fd[0]);
 		free_ptr(data.cmd_argv);
