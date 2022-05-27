@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/02 20:09:11 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/26 03:48:15 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/26 19:10:41 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ static char	**ft_get_words(char const *s, char c, size_t num_words, char **arr)
 				i++;
 		}
 		arr[j] = fill_word(arr, j, i, &s);
+		j++;
 	}
 	return (arr);
 }
@@ -96,6 +97,6 @@ char	**ft_split(char const *s, char c)
 	if (!arr)
 		return (NULL);
 	arr = ft_get_words(s, c, num_words, arr);
-	arr[num_words + 1] = NULL;
+	arr[num_words] = NULL;
 	return (arr);
 }

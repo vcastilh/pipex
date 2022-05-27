@@ -6,7 +6,7 @@
 /*   By: vcastilh <vcastilh@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 00:23:02 by vcastilh          #+#    #+#             */
-/*   Updated: 2022/05/26 03:51:34 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/27 03:01:40 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <string.h>
+# include <stdio.h>
 # include "libft.h"
 
 typedef struct s_data

@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:45:26 by coder             #+#    #+#             */
-/*   Updated: 2022/05/25 21:51:58 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/27 13:29:05 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,15 +86,13 @@ int	open_file(char *file, int flag, t_data *data, int is_getting_data)
 	{
 		if (is_getting_data)
 		{
-			handle_exit(file,
-				ft_strdup(":No such file or directory\n"),
-				data, 1);
+			handle_exit(file, 
+				ft_strdup(":No such file or directory\n"), data, 1);
 		}
 		else
 		{
-			handle_exit(file,
-				ft_strdup(":No such file or directory\n"),
-				data, 0);
+			perror("File error");
+			strerror(2);
 		}
 	}
 	return (fd);
@@ -112,8 +110,10 @@ void	get_data(t_data *data, char **argv, char **envp)
 			if (*data->pathname)
 				data->pathname = ft_strdup(data->pathname);
 			else
+			{
 				handle_exit(*data->cmd_argv, ft_strdup(":comand not found\n"),
 					data, 1);
+			}
 		}
 		else
 		{
