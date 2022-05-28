@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:45:26 by coder             #+#    #+#             */
-/*   Updated: 2022/05/27 21:08:58 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/28 04:51:49 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	open_file(char *file, int flag, t_data *data, int is_getting_data)
 	int	fd;
 
 	fd = open(file, flag, 0664);
-	if (fd == -1)
+	if (fd < 0)
 	{
 		if (is_getting_data)
 		{
@@ -92,7 +92,6 @@ int	open_file(char *file, int flag, t_data *data, int is_getting_data)
 		else
 		{
 			perror("File error");
-			strerror(2);
 		}
 	}
 	return (fd);
@@ -109,7 +108,7 @@ void	get_data(t_data *data, char **argv, char **envp)
 			data->pathname = check_bin_acess(data);
 			if (*data->pathname)
 				data->pathname = ft_strdup(data->pathname);
-			else
+			else if (data->cmd_pos != 2)
 			{
 				handle_exit(*data->cmd_argv, ft_strdup(":comand not found\n"),
 					data, 1);
