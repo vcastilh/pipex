@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:45:26 by coder             #+#    #+#             */
-/*   Updated: 2022/05/28 04:51:49 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/29 19:29:06 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,24 +77,14 @@ char	*check_bin_acess(t_data *data)
 	return (ft_strdup(""));
 }
 
-int	open_file(char *file, int flag, t_data *data, int is_getting_data)
+void	open_files(char *argv[], t_data *data)
 {
-	int	fd;
-
-	fd = open(file, flag, 0664);
-	if (fd < 0)
-	{
-		if (is_getting_data)
-		{
-			handle_exit(file, 
-				ft_strdup(":No such file or directory\n"), data, 1);
-		}
-		else
-		{
-			perror("File error");
-		}
-	}
-	return (fd);
+	data->fd[0] = open(argv[1], F_OK);
+	data->fd[1] = open(argv[4], O_TRUNC | O_RDWR | O_CREAT, 0644);
+	if (data->fd[0] < 0)
+		perror(argv[1]);
+	if (data->fd[1] < 0)
+		perror(argv[4]);
 }
 
 void	get_data(t_data *data, char **argv, char **envp)
@@ -108,21 +98,10 @@ void	get_data(t_data *data, char **argv, char **envp)
 			data->pathname = check_bin_acess(data);
 			if (*data->pathname)
 				data->pathname = ft_strdup(data->pathname);
-			else if (data->cmd_pos != 2)
-			{
-				handle_exit(*data->cmd_argv, ft_strdup(":comand not found\n"),
-					data, 1);
-			}
 		}
 		else
-		{
-			handle_exit(*data->cmd_argv,
-				ft_strdup(":comand not found\n"), data, 1);
-		}
+			write(2, "Failed to get bin path\n", 23);
 	}
 	else
-	{
-		handle_exit(*data->cmd_argv, ft_strdup(":comand not found\n"),
-			data, 1);
-	}	
+		write(2, "Failed to get cmd  argv\n", 23);
 }

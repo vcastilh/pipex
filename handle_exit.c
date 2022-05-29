@@ -6,11 +6,29 @@
 /*   By: coder <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 19:02:12 by coder             #+#    #+#             */
-/*   Updated: 2022/05/25 13:05:07 by coder            ###   ########.fr       */
+/*   Updated: 2022/05/29 20:34:45 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	check_argc(int argc, char *argv[], t_data *data)
+{
+	if (argc != 5)
+	{
+		data->exit_status = 1;
+		handle_exit(argv[0], ft_strdup(":Error: need 4 arguments\n"), data, 0);
+	}
+}
+
+void	close_fds(t_data *data)
+{
+	close(data->pipe_fd[0]);
+	if (data->fd[0] > 0)
+		close(data->fd[0]);
+	if (data->fd[1] > 0)
+		close(data->fd[1]);
+}
 
 void	free_ptr(char **str)
 {
@@ -37,5 +55,5 @@ void	handle_exit(char *arg, char *msg, t_data *data, int is_get_data)
 		free_ptr(data->bin_path);
 		free(data->pathname);
 	}
-	exit(1);
+	exit(data->exit_status);
 }

@@ -6,7 +6,7 @@
 #    By: vcastilh <vcastilh@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/22 00:26:46 by vcastilh          #+#    #+#              #
-#    Updated: 2022/05/24 16:08:51 by coder            ###   ########.fr        #
+#    Updated: 2022/05/29 21:13:45 by coder            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,13 +24,13 @@ OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME): $(OBJS) libft/$(LIBFT)
 	$(CC) $(OBJS) -Llibft -lft -o $(NAME) 
 
 $(OBJS): $(SRCS)
 	$(CC) $(CFLAGS) -Ilibft $(SRCS) 
 
-$(LIBFT):
+libft/$(LIBFT):
 	make -C libft
 
 clean:
